@@ -23,7 +23,7 @@
 ;;; Code:
 (deftheme will
   "Crazy-pants colours with a black background. Adapted from wombat. Basic,
-  Font Lock, Isearch, Gnus, Message, and Ansi-Color faces are included.")
+  Font Lock, Isearch, Message, and Ansi-Color faces are included.")
 
 (let ((class '((class color) (min-colors 89))))
   (custom-theme-set-faces
