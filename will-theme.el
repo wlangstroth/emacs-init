@@ -28,7 +28,7 @@
 (let ((class '((class color) (min-colors 89))))
   (custom-theme-set-faces
    'will
-   `(default ((,class (:background "#000000" :foreground "#f6f3e8"))))
+   `(default ((,class (:background "#000000" :foreground "beige"))))
    `(cursor ((,class (:background "#656565"))))
    ;; Highlighting faces
    `(fringe ((,class (:background "#303030"))))
@@ -45,15 +45,21 @@
    `(minibuffer-prompt ((,class (:foreground "#e5786d"))))
    `(escape-glyph ((,class (:foreground "#ddaa6f" :weight bold))))
    ;; Font lock faces
-   `(font-lock-builtin-face ((,class (:foreground "#e5786d"))))
-   `(font-lock-comment-face ((,class (:foreground "#99968b"))))
-   `(font-lock-constant-face ((,class (:foreground "#e5786d"))))
-   `(font-lock-function-name-face ((,class (:foreground "#cae682"))))
-   `(font-lock-keyword-face ((,class (:foreground "#8ac6f2" :weight bold))))
-   `(font-lock-string-face ((,class (:foreground "#95e454"))))
-   `(font-lock-type-face ((,class (:foreground "#92a65e" :weight bold))))
-   `(font-lock-variable-name-face ((,class (:foreground "#cae682"))))
-   `(font-lock-warning-face ((,class (:foreground "#ccaa8f"))))
+   `(font-lock-builtin-face ((,class (:foreground "dodger blue"))))
+   `(font-lock-keyword-face ((,class (:foreground "dark orange" :weight bold))))
+   `(font-lock-comment-delimiter-face ((,class (:foreground "gray41"))))
+   `(font-lock-comment-face ((,class (:foreground "gray41"))))
+   `(font-lock-constant-face ((,class (:foreground "#0553a1"))))
+   `(font-lock-doc-face ((,class (:foreground "gray41"))))
+   `(font-lock-function-name-face ((,class (:foreground "turquoise"))))
+   `(font-lock-negation-char-face ((,class (:foreground "blue violet"))))
+   `(font-lock-preprocessor-face ((,class (:foreground "#5555ff"))))
+   `(font-lock-regexp-grouping-backslash ((,class (:bold t :weight bold))))
+   `(font-lock-regexp-grouping-construct ((,class (:bold t :weight bold))))
+   `(font-lock-string-face ((,class (:foreground "green"))))
+   `(font-lock-type-face ((,class (:foreground "deep sky blue"))))
+   `(font-lock-variable-name-face ((,class (:foreground "magenta"))))
+   `(font-lock-warning-face ((,class (:bold t :foreground "pink" :weight bold))))
    ;; Button and link faces
    `(link ((,class (:foreground "#8ac6f2" :underline t))))
    `(link-visited ((,class (:foreground "#e5786d" :underline t))))
@@ -90,11 +96,20 @@
    `(message-header-subject ((,class (:foreground "#cae682"))))
    `(message-header-to ((,class (:foreground "#cae682"))))
    `(message-cited-text ((,class (:foreground "#99968b"))))
-   `(message-separator ((,class (:foreground "#e5786d" :weight bold))))))
+   `(message-separator ((,class (:foreground "#e5786d" :weight bold))))
+   ;; Org faces
+   `(outline-1 ((,class (:foreground "#55ff55"))))
+   `(outline-2 ((,class (:foreground "#f92672"))))
+   `(outline-3 ((,class (nil))))
+   `(outline-4 ((,class (:foreground "#008ed1"))))
+   `(outline-5 ((,class (:foreground "#b9fc6d"))))
+   `(outline-6 ((,class (:foreground "purple"))))
+   `(outline-7 ((,class (:foreground "#5555ff"))))
+   `(outline-8 ((,class (:foreground "#ffff55"))))))
 
 (custom-theme-set-variables
  'will
- '(ansi-color-names-vector ["#242424" "#e5786d" "#95e454" "#cae682"
+ '(ansi-color-names-vector ["#242424" "#0553a1" "#4f863f" "#c17248"
 			    "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"]))
 
 ;; Local Variables:
