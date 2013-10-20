@@ -14,8 +14,8 @@
 
 ;; -- Visual settings ----------------------------------------------------------
 (setq inhibit-splash-screen t)
-(setq initial-frame-alist '((width . 202) (height . 56)))
-(add-to-list 'default-frame-alist '(height . 56))
+(setq initial-frame-alist '((width . 202) (height . 60)))
+(add-to-list 'default-frame-alist '(height . 60))
 (add-to-list 'default-frame-alist '(width . 202))
 (load-theme 'will t)
 (global-linum-mode 1)
