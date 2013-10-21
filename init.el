@@ -64,14 +64,6 @@
 	(replace-match "" nil nil)))
 (global-set-key (kbd "C-c w") 'whack-whitespace)
 
-;; (defun beginning-of-line-or-indentation ()
-;;   "Move to beginning of line, or indentation"
-;;   (interactive)
-;;   (if (bolp)
-;;       (back-to-indentation)
-;;     (beginning-of-line)))
-;; (global-set-key (kbd "C-a") 'beginning-of-line-or-indentation)
-
 (defun comment-or-uncomment-region-or-line ()
   "Comments or uncomments the region or the current line if there's no active region."
   (interactive)
