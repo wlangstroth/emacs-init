@@ -23,6 +23,10 @@
 (setq column-number-mode t)
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+;; Menu bar only if we're in the GUI
+(if (memq window-system '(mac ns))
+  (menu-bar-mode 1) (menu-bar-mode 0))
+
 (blink-cursor-mode 0)
 (setq display-time-day-and-date t
       display-time-24hr-format t)
@@ -30,15 +34,13 @@
 
 ;; -- Annoying Things ----------------------------------------------------------
 (setq ring-bell-function 'ignore)
+(setq blink-matching-delay 0.25)
 (setq auto-save-default nil)
 (setq make-backup-files nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-;; -- Steve Yegge Section ------------------------------------------------------
-(global-set-key (kbd "C-w") 'backward-kill-word)
-(global-set-key (kbd "C-x C-k") 'kill-region)
-
+;; -- Fiplr --------------------------------------------------------------------
 (global-set-key (kbd "C-c f") 'fiplr-find-file)
 (setq fiplr-root-markers '(".git" ".hg"))
 (setq fiplr-ignored-globs '((directories (".git" ".hg" "tmp" "log"))
@@ -65,7 +67,8 @@
 (global-set-key (kbd "C-c w") 'whack-whitespace)
 
 (defun comment-or-uncomment-region-or-line ()
-  "Comments or uncomments the region or the current line if there's no active region."
+  "Comments or uncomments the region or the current line if
+  there's no active region."
   (interactive)
   (let (beg end)
     (if (region-active-p)
@@ -90,6 +93,17 @@
 (add-to-list 'auto-mode-alist '("\\.ru$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Guardfile$" . ruby-mode))
+(setq ruby-deep-indent-paren nil)
+; Ruby end mode doesn't seem to be firing - force it here
+(add-hook 'ruby-mode-hook
+          (lambda ()
+            (ruby-end-mode 1)))
+(add-hook 'enh-ruby-mode-hook
+          (lambda ()
+            (ruby-end-mode 1)))
+
+;; -- Racket File Type ---------------------------------------------------------
+(add-to-list 'auto-mode-alist '("\\.rkt$" . scheme-mode))
 
 ;; Scroll one line at a time (less "jumpy" than defaults)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
@@ -115,6 +129,8 @@
 (setq org-hide-leading-stars t)
 
 ;; -- Packages -----------------------------------------------------------------
+;; To set these up, execute this expression (go to the end of the
+;; expression and C-x C-e)
 (mapc
  (lambda (package)
    (or (package-installed-p package)
