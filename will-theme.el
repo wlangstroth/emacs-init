@@ -75,9 +75,9 @@
    `(message-separator ((,class (:foreground "#e5786d" :weight bold))))
    ;; Org faces
    `(outline-1 ((,class (:foreground "#55ff55"))))
-   `(outline-2 ((,class (:foreground "#f92672"))))
+   `(outline-2 ((,class (:foreground "#008ed1"))))
    `(outline-3 ((,class (nil))))
-   `(outline-4 ((,class (:foreground "#008ed1"))))
+   `(outline-4 ((,class (:foreground "#f92672"))))
    `(outline-5 ((,class (:foreground "#b9fc6d"))))
    `(outline-6 ((,class (:foreground "purple"))))
    `(outline-7 ((,class (:foreground "#5555ff"))))
