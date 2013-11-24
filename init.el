@@ -40,20 +40,23 @@
 (setq make-backup-files nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+(delete-selection-mode 1)
 
 ;; -- Fiplr --------------------------------------------------------------------
 (global-set-key (kbd "C-c f") 'fiplr-find-file)
 (setq fiplr-root-markers '(".git" ".hg"))
-(setq fiplr-ignored-globs '((directories (".git" ".hg" "tmp" "log"))
+(setq fiplr-ignored-globs '((directories (".git" ".hg" "tmp" "log" "coverage"))
                             (files ("*.jpg" "*.png" "*.zip" "*~"))))
 
 ;; -- Undo and Editing ---------------------------------------------------------
 (global-set-key (kbd "C-c u") 'undo-tree-visualize)
+(undo-tree-mode t)
 (global-set-key (kbd "C-c q") 'auto-fill-mode)
-(set-fill-column 80)
+(setq-default fill-column 80)
 (setq tab-width 4)
 (electric-pair-mode 1)
-(define-key global-map (kbd "RET") 'newline-and-indent)
+
+
 
 (defun whack-whitespace (arg)
   "Delete all white space from point to the next word. With prefix ARG
