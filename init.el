@@ -128,8 +128,9 @@
 (global-set-key (kbd "C-c n") 'next-buffer)
 (global-set-key (kbd "C-c p") 'previous-buffer)
 
-;; ISO, dammit
-;; (calendar-set-date-style 'iso)
+;; These are only active in the GUI version
+(global-set-key (kbd "s-{") 'previous-buffer)
+(global-set-key (kbd "s-}") 'next-buffer)
 
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
