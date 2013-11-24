@@ -102,13 +102,18 @@
 (add-hook 'ruby-mode-hook
           (lambda ()
             (ruby-end-mode 1)))
-(add-hook 'enh-ruby-mode-hook
-          (lambda ()
-            (ruby-end-mode 1)))
+(add-hook 'ruby-mode-hook
+	  (lambda ()
+	    (local-set-key (kbd "RET") 'newline-and-indent)))
 
-;; -- Racket File Type ---------------------------------------------------------
-(add-to-list 'auto-mode-alist '("\\.rkt$" . scheme-mode))
+;; -- Haskell Mode -------------------------------------------------------------
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
+(add-hook 'haskell-mode-hook
+	  (lambda ()
+	    (setq tab-width 4)))
 
+;; -- scrolling ----------------------------------------------------------------
 ;; Scroll one line at a time (less "jumpy" than defaults)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
