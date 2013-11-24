@@ -138,6 +138,10 @@
 ;; -- Org Mode -----------------------------------------------------------------
 (setq org-hide-leading-stars t)
 
+;; -- Geiser Settings ----------------------------------------------------------
+(setq geiser-active-implementations '(racket))
+(setq geiser-mode-autodoc-p nil)
+
 ;; -- Packages -----------------------------------------------------------------
 ;; To set these up, execute this expression (go to the end of the
 ;; expression and C-x C-e)
