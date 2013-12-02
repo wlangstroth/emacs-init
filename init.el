@@ -6,11 +6,23 @@
 
 ;;; Code:
 
+;; -- Packages -----------------------------------------------------------------
 (require 'package)
 (add-to-list 'package-archives
   '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
-(require 'cl) ; For fiplr and grizzl
+
+;; To set these up, execute this expression (go to the end of the
+;; expression and C-x C-e). Magical.
+(mapc
+ (lambda (package)
+   (or (package-installed-p package)
+       (if (y-or-n-p (format "Package %s is missing. Install it? " package))
+           (package-install package))))
+ '(ag dash exec-path-from-shell f findr fiplr flycheck grizzl haml-mode
+      haskell-mode rainbow-mode inf-ruby inflections jump markdown-mode org
+      paredit pkg-info pkg-info rbenv ruby-compilation ruby-electric ruby-end s
+      slim-mode undo-tree w3m whitespace-cleanup-mode yaml-mode yasnippet))
 
 ;; -- Visual settings ----------------------------------------------------------
 (setq inhibit-splash-screen t)
@@ -23,9 +35,6 @@
 (setq column-number-mode t)
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-;; Menu bar only if we're in the GUI
-(if (memq window-system '(mac ns))
-  (menu-bar-mode 1) (menu-bar-mode 0))
 
 (blink-cursor-mode 0)
 (setq display-time-day-and-date t
@@ -40,9 +49,10 @@
 (setq make-backup-files nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-(delete-selection-mode 1)
+
 
 ;; -- Fiplr --------------------------------------------------------------------
+(require 'cl)
 (global-set-key (kbd "C-c f") 'fiplr-find-file)
 (setq fiplr-root-markers '(".git" ".hg"))
 (setq fiplr-ignored-globs '((directories (".git" ".hg" "tmp" "log" "coverage"))
@@ -55,8 +65,7 @@
 (setq-default fill-column 80)
 (setq tab-width 4)
 (electric-pair-mode 1)
-
-
+(delete-selection-mode 1)
 
 (defun whack-whitespace (arg)
   "Delete all white space from point to the next word. With prefix ARG
@@ -109,11 +118,13 @@
 ;; -- Haskell Mode -------------------------------------------------------------
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
-(add-hook 'haskell-mode-hook
-	  (lambda ()
-	    (setq tab-width 4)))
 
-;; -- scrolling ----------------------------------------------------------------
+;; -- Lisp Mode ----------------------------------------------------------------
+(add-hook 'lisp-mode-hook
+	  (lambda ()
+	    (local-set-key (kbd "RET") 'newline-and-indent)))
+
+;; -- Scrolling ----------------------------------------------------------------
 ;; Scroll one line at a time (less "jumpy" than defaults)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
@@ -125,15 +136,11 @@
 
 ;; Keep C-x k from prompting unless there have been changes
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
-(global-set-key (kbd "C-c n") 'next-buffer)
-(global-set-key (kbd "C-c p") 'previous-buffer)
+(global-set-key (kbd "M-n") 'next-buffer)
+(global-set-key (kbd "M-p") 'previous-buffer)
 
-;; These are only active in the GUI version
-(global-set-key (kbd "s-{") 'previous-buffer)
-(global-set-key (kbd "s-}") 'next-buffer)
-
-(when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize))
+;; Search with ag
+(global-set-key (kbd "C-c s") 'ag)
 
 ;; -- Org Mode -----------------------------------------------------------------
 (setq org-hide-leading-stars t)
@@ -142,18 +149,10 @@
 (setq geiser-active-implementations '(racket))
 (setq geiser-mode-autodoc-p nil)
 
-;; -- Packages -----------------------------------------------------------------
-;; To set these up, execute this expression (go to the end of the
-;; expression and C-x C-e)
-(mapc
- (lambda (package)
-   (or (package-installed-p package)
-       (if (y-or-n-p (format "Package %s is missing. Install it? " package))
-           (package-install package))))
- '(ag dash exec-path-from-shell f findr fiplr flycheck grizzl haml-mode
-      haskell-mode rainbow-mode hi2 inf-ruby inflections jump markdown-mode org
-      paredit pkg-info pkg-info rbenv ruby-compilation ruby-electric ruby-end s
-      slim-mode undo-tree w3m whitespace-cleanup-mode yaml-mode yasnippet))
 
-;; -- Font for GUI -------------------------------------------------------------
+;; -- GUI Settings -------------------------------------------------------------
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize)
+  (menu-bar-mode 1)
+  (menu-bar-mode 0))
 (set-face-attribute 'default nil :font "Menlo-12")
