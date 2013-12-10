@@ -149,10 +149,10 @@
 (setq geiser-active-implementations '(racket))
 (setq geiser-mode-autodoc-p nil)
 
-
 ;; -- GUI Settings -------------------------------------------------------------
 (when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-initialize))
+(if (memq window-system '(mac ns))
   (menu-bar-mode 1)
   (menu-bar-mode 0))
 (set-face-attribute 'default nil :font "Menlo-12")
