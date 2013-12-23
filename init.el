@@ -22,7 +22,7 @@
  '(ag dash exec-path-from-shell f findr fiplr flycheck grizzl haml-mode
       haskell-mode rainbow-mode inf-ruby inflections jump markdown-mode org
       paredit pkg-info pkg-info rbenv ruby-compilation ruby-electric ruby-end s
-      slim-mode undo-tree w3m whitespace-cleanup-mode yaml-mode yasnippet))
+      slim-mode undo-tree whitespace-cleanup-mode yaml-mode yasnippet))
 
 ;; -- Visual settings ----------------------------------------------------------
 (setq inhibit-splash-screen t)
