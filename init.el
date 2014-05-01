@@ -26,16 +26,11 @@
 
 ;; -- Visual settings ----------------------------------------------------------
 (setq inhibit-splash-screen t)
-(setq initial-frame-alist '((width . 202) (height . 60)))
-(add-to-list 'default-frame-alist '(height . 60))
-(add-to-list 'default-frame-alist '(width . 202))
+(setq initial-frame-alist '((width . 175) (height . 50)))
+(add-to-list 'default-frame-alist '(height . 50))
+(add-to-list 'default-frame-alist '(width . 175))
 (load-theme 'will t)
 (global-linum-mode 1)
-(setq linum-format "%4d ")
-(setq column-number-mode t)
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-
 (blink-cursor-mode 0)
 (setq display-time-day-and-date t
       display-time-24hr-format t)
@@ -49,7 +44,6 @@
 (setq make-backup-files nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
 
 ;; -- Fiplr --------------------------------------------------------------------
 (require 'cl)
@@ -115,6 +109,12 @@
 	  (lambda ()
 	    (local-set-key (kbd "RET") 'newline-and-indent)))
 
+;; This is a terrible, terrible default.
+(setq ruby-insert-encoding-magic-comment nil)
+
+;; -- Markdown -----------------------------------------------------------------
+(add-to-list 'auto-mode-alist '("\\.mkd$" . markdown-mode))
+
 ;; -- Haskell Mode -------------------------------------------------------------
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
@@ -155,4 +155,19 @@
 (if (memq window-system '(mac ns))
   (menu-bar-mode 1)
   (menu-bar-mode 0))
-(set-face-attribute 'default nil :font "Menlo-12")
+(set-face-attribute 'default nil :font "Inconsolata-15")
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(blink-cursor-mode nil)
+ '(column-number-mode t)
+ '(display-time-mode t)
+ '(tool-bar-mode nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
