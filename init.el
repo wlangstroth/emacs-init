@@ -20,9 +20,10 @@
        (if (y-or-n-p (format "Package %s is missing. Install it? " package))
            (package-install package))))
  '(ag dash exec-path-from-shell f findr fiplr flycheck grizzl haml-mode
-      haskell-mode rainbow-mode inf-ruby inflections jump markdown-mode org
-      paredit pkg-info pkg-info rbenv ruby-compilation ruby-electric ruby-end s
-      slim-mode undo-tree whitespace-cleanup-mode yaml-mode yasnippet))
+      haskell-mode rainbow-mode inf-ruby inflections jump magit markdown-mode
+      org paredit pkg-info pkg-info rbenv ruby-compilation ruby-electric
+      ruby-end s slim-mode undo-tree whitespace-cleanup-mode yaml-mode
+      yasnippet))
 
 ;; -- Visual settings ----------------------------------------------------------
 (setq inhibit-splash-screen t)
