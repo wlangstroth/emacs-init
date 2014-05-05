@@ -12,18 +12,16 @@
   '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 
-;; To set these up, execute this expression (go to the end of the
-;; expression and C-x C-e). Magical.
+;; To set these up, go to the end of the expression and C-x C-e.
 (mapc
  (lambda (package)
    (or (package-installed-p package)
        (if (y-or-n-p (format "Package %s is missing. Install it? " package))
            (package-install package))))
  '(ag dash exec-path-from-shell f findr fiplr flycheck grizzl haml-mode
-      haskell-mode rainbow-mode inf-ruby inflections jump magit markdown-mode
-      org paredit pkg-info pkg-info rbenv ruby-compilation ruby-electric
-      ruby-end s slim-mode undo-tree whitespace-cleanup-mode yaml-mode
-      yasnippet))
+      haskell-mode inf-ruby inflections jump magit markdown-mode org paredit
+      pkg-info pkg-info rbenv ruby-compilation ruby-electric ruby-end s
+      slim-mode undo-tree whitespace-cleanup-mode yaml-mode yasnippet))
 
 ;; -- Visual settings ----------------------------------------------------------
 (setq inhibit-splash-screen t)
@@ -37,6 +35,9 @@
       display-time-24hr-format t)
 (display-time)
 (setq cursor-type 'box)
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(column-number-mode 1)
 
 ;; -- Annoying Things ----------------------------------------------------------
 (setq ring-bell-function 'ignore)
@@ -85,14 +86,6 @@
     (comment-or-uncomment-region beg end)))
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region-or-line)
 (global-set-key (kbd "s-/") 'comment-or-uncomment-region-or-line)
-
-;; (defun match-paren (arg)
-;;   "Go to the matching paren if on a paren; otherwise insert %."
-;;   (interactive "p")
-;;   (cond ((looking-at "\\s\(") (forward-list 1) (backward-char 1))
-;; 	((looking-at "\\s\)") (forward-char 1) (backward-list 1))
-;; 	(t (self-insert-command (or arg 1)))))
-;; (global-set-key "%" 'match-paren)
 
 ;; -- Ruby File Types ----------------------------------------------------------
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
@@ -157,18 +150,3 @@
   (menu-bar-mode 1)
   (menu-bar-mode 0))
 (set-face-attribute 'default nil :font "Inconsolata-15")
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(blink-cursor-mode nil)
- '(column-number-mode t)
- '(display-time-mode t)
- '(tool-bar-mode nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
