@@ -12,7 +12,7 @@
   '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 
-;; To set these up, go to the end of the expression and C-x C-e.
+;; To refresh, go to the end of the expression and C-x C-e.
 (mapc
  (lambda (package)
    (or (package-installed-p package)
