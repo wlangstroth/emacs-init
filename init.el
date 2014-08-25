@@ -2,7 +2,7 @@
 
 ;;; Commentary:
 
-; Hacked together by someone who isn't an emacs wizard. Caveat lector.
+;; Hacked together by someone who isn't an emacs wizard. Caveat lector.
 
 ;;; Code:
 
@@ -18,10 +18,15 @@
    (or (package-installed-p package)
        (if (y-or-n-p (format "Package %s is missing. Install it? " package))
            (package-install package))))
- '(ag dash exec-path-from-shell f findr fiplr flycheck grizzl haml-mode
-      haskell-mode inf-ruby inflections jump magit markdown-mode org paredit
-      pkg-info pkg-info rbenv ruby-compilation ruby-electric ruby-end s
-      slim-mode undo-tree whitespace-cleanup-mode yaml-mode yasnippet))
+ '(ag company-ghc dash exec-path-from-shell f findr flx flx-ido flycheck
+      flymake-ruby git haml-mode haskell-mode inf-ruby inflections jump magit
+      markdown-mode org paredit pkg-info pkg-info projectile projectile-rails
+      rbenv ruby-compilation ruby-electric ruby-end ruby-hash-syntax
+      ruby-test-mode s slim-mode undo-tree whitespace-cleanup-mode yaml-mode
+      yasnippet))
+
+(require 'ido)
+(ido-mode t)
 
 ;; -- Visual settings ----------------------------------------------------------
 (setq inhibit-splash-screen t)
@@ -29,7 +34,6 @@
 (add-to-list 'default-frame-alist '(height . 50))
 (add-to-list 'default-frame-alist '(width . 175))
 (load-theme 'will t)
-(global-linum-mode 1)
 (blink-cursor-mode 0)
 (setq display-time-day-and-date t
       display-time-24hr-format t)
@@ -38,6 +42,15 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (column-number-mode 1)
+(setq ns-use-srgb-colorspace t)
+
+;; -- Linum Mode ---------------------------------------------------------------
+(global-linum-mode 1)
+(setq linum-format "%d ")
+(setq linum-disabled-modes-list '(eshell-mode wl-summary-mode compilation-mode))
+(defun linum-on ()
+  (unless (or (minibufferp) (member major-mode linum-disabled-modes-list))
+    (linum-mode 1)))
 
 ;; -- Annoying Things ----------------------------------------------------------
 (setq ring-bell-function 'ignore)
@@ -46,13 +59,6 @@
 (setq make-backup-files nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-;; -- Fiplr --------------------------------------------------------------------
-(require 'cl)
-(global-set-key (kbd "C-c f") 'fiplr-find-file)
-(setq fiplr-root-markers '(".git" ".hg"))
-(setq fiplr-ignored-globs '((directories (".git" ".hg" "tmp" "log" "coverage"))
-                            (files ("*.jpg" "*.png" "*.zip" "*~"))))
 
 ;; -- Undo and Editing ---------------------------------------------------------
 (global-set-key (kbd "C-c u") 'undo-tree-visualize)
@@ -94,7 +100,7 @@
 (add-to-list 'auto-mode-alist '("\\.ru$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Guardfile$" . ruby-mode))
-(setq ruby-deep-indent-paren nil)
+
 ; Ruby end mode doesn't seem to be firing - force it here
 (add-hook 'ruby-mode-hook
           (lambda ()
@@ -102,16 +108,61 @@
 (add-hook 'ruby-mode-hook
 	  (lambda ()
 	    (local-set-key (kbd "RET") 'newline-and-indent)))
+(add-hook 'ruby-mode-hook
+	  (lambda ()
+	    (local-set-key (kbd "C-c r r") 'inf-ruby)))
 
-;; This is a terrible, terrible default.
+;; Syntax help
+(add-hook 'ruby-mode-hook 'flymake-ruby-load)
+(add-hook 'ruby-mode-hook 'robe-mode)
+
+;; Projectile and rails
+(add-hook 'ruby-mode-hook 'projectile-on)
+
+;; Fix strange defaults
 (setq ruby-insert-encoding-magic-comment nil)
+(setq ruby-deep-indent-paren nil)
+
+;; Syntax help
+(add-hook 'ruby-mode-hook 'flymake-ruby-load)
+(add-hook 'ruby-mode-hook 'robe-mode)
+
+;; Projectile and rails
+(add-hook 'ruby-mode-hook 'projectile-on)
+
+;; Display ido results vertically, rather than horizontally
+(setq ido-decorations
+      (quote
+       ("\n-> " "" "\n   " "\n   ..." "[" "]"
+	" [No match]" " [Matched]" " [Not readable]"
+	" [Too big]" " [Confirm]")))
+
+(defun ido-disable-line-truncation ()
+  (set (make-local-variable 'truncate-lines) nil))
+
+(defun ido-define-keys () ; C-n/p is more intuitive in vertical layout
+  (define-key ido-completion-map (kbd "C-n") 'ido-next-match)
+  (define-key ido-completion-map (kbd "C-p") 'ido-prev-match))
+
+(add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-truncation)
+(add-hook 'ido-setup-hook 'ido-define-keys)
+(add-hook 'projectile-mode-hook 'projectile-rails-on)
+
+(global-company-mode t)
 
 ;; -- Markdown -----------------------------------------------------------------
 (add-to-list 'auto-mode-alist '("\\.mkd$" . markdown-mode))
 
 ;; -- Haskell Mode -------------------------------------------------------------
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
+(defun haskell-style ()
+  "Sets the current buffer to use Haskell Style. Meant to be
+  added to `haskell-mode-hook'"
+  (interactive)
+  (setq tab-width 4
+        haskell-indentation-layout-offset 4
+        haskell-indentation-left-offset 4
+        haskell-indentation-ifte-offset 4))
+(add-hook 'haskell-mode-hook 'haskell-style)
 
 ;; -- Lisp Mode ----------------------------------------------------------------
 (add-hook 'lisp-mode-hook
@@ -140,8 +191,8 @@
 (setq org-hide-leading-stars t)
 
 ;; -- Geiser Settings ----------------------------------------------------------
-(setq geiser-active-implementations '(racket))
-(setq geiser-mode-autodoc-p nil)
+;; (setq geiser-active-implementations '(racket))
+;; (setq geiser-mode-autodoc-p nil)
 
 ;; -- GUI Settings -------------------------------------------------------------
 (when (memq window-system '(mac ns))
@@ -149,4 +200,5 @@
 (if (memq window-system '(mac ns))
   (menu-bar-mode 1)
   (menu-bar-mode 0))
-(set-face-attribute 'default nil :font "Inconsolata-15")
+(when (memq window-system '(mac ns))
+  (set-face-attribute 'default nil :font "Inconsolata-15"))
