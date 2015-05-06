@@ -18,12 +18,9 @@
    (or (package-installed-p package)
        (if (y-or-n-p (format "Package %s is missing. Install it? " package))
            (package-install package))))
- '(ag company-ghc dash exec-path-from-shell f findr flx flx-ido flycheck
-      flymake-ruby git haml-mode haskell-mode inf-ruby inflections jump magit
-      markdown-mode org paredit pkg-info pkg-info projectile projectile-rails
-      rbenv ruby-compilation ruby-electric ruby-end ruby-hash-syntax
-      ruby-test-mode s slim-mode undo-tree whitespace-cleanup-mode yaml-mode
-      yasnippet))
+ '(ag company-ghc dash exec-path-from-shell f findr flx flx-ido flycheck git
+      haskell-mode inflections jump magit markdown-mode org paredit pkg-info s
+      undo-tree whitespace-cleanup-mode yasnippet))
 
 (require 'ido)
 (ido-mode t)
