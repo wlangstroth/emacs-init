@@ -122,7 +122,11 @@
         haskell-indentation-layout-offset 4
         haskell-indentation-left-offset 4
         haskell-indentation-ifte-offset 4))
+
 (add-hook 'haskell-mode-hook 'haskell-style)
+(add-hook 'haskell-mode-hook 'haskell-indentation-mode)
+;; Don't show the underscores
+(add-hook 'haskell-mode-hook 'haskell-indentation-disable-show-indentations)
 
 ;; -- Lisp Mode ----------------------------------------------------------------
 (add-hook 'lisp-mode-hook
