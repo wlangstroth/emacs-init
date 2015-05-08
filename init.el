@@ -90,43 +90,6 @@
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region-or-line)
 (global-set-key (kbd "s-/") 'comment-or-uncomment-region-or-line)
 
-;; -- Ruby File Types ----------------------------------------------------------
-(add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.ru$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Guardfile$" . ruby-mode))
-
-; Ruby end mode doesn't seem to be firing - force it here
-(add-hook 'ruby-mode-hook
-          (lambda ()
-            (ruby-end-mode 1)))
-(add-hook 'ruby-mode-hook
-	  (lambda ()
-	    (local-set-key (kbd "RET") 'newline-and-indent)))
-(add-hook 'ruby-mode-hook
-	  (lambda ()
-	    (local-set-key (kbd "C-c r r") 'inf-ruby)))
-
-;; Syntax help
-(add-hook 'ruby-mode-hook 'flymake-ruby-load)
-(add-hook 'ruby-mode-hook 'robe-mode)
-
-;; Projectile and rails
-(add-hook 'ruby-mode-hook 'projectile-on)
-
-;; Fix strange defaults
-(setq ruby-insert-encoding-magic-comment nil)
-(setq ruby-deep-indent-paren nil)
-
-;; Syntax help
-(add-hook 'ruby-mode-hook 'flymake-ruby-load)
-(add-hook 'ruby-mode-hook 'robe-mode)
-
-;; Projectile and rails
-(add-hook 'ruby-mode-hook 'projectile-on)
-
 ;; Display ido results vertically, rather than horizontally
 (setq ido-decorations
       (quote
