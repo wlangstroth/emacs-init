@@ -27,9 +27,9 @@
 
 ;; -- Visual settings ----------------------------------------------------------
 (setq inhibit-splash-screen t)
-(setq initial-frame-alist '((width . 175) (height . 50)))
-(add-to-list 'default-frame-alist '(height . 50))
-(add-to-list 'default-frame-alist '(width . 175))
+(setq initial-frame-alist '((width . 157) (height . 47)))
+(add-to-list 'default-frame-alist '(height . 47))
+(add-to-list 'default-frame-alist '(width . 157))
 (load-theme 'will t)
 (blink-cursor-mode 0)
 (setq display-time-day-and-date t
@@ -40,6 +40,11 @@
 (tool-bar-mode -1)
 (column-number-mode 1)
 (setq ns-use-srgb-colorspace t)
+
+;; N.B. To get antialiasing to be not insane on OS X, the following works:
+;; defaults write org.gnu.Emacs AppleAntiAliasingThreshold 2 There doesn't seem
+;; to be a big difference in values between 1 and 4, but much larger numbers
+;; turn off antialising for all intents and purposes.
 
 ;; -- Linum Mode ---------------------------------------------------------------
 (global-linum-mode 1)
@@ -155,8 +160,8 @@
 (setq org-hide-leading-stars t)
 
 ;; -- Geiser Settings ----------------------------------------------------------
-;; (setq geiser-active-implementations '(racket))
-;; (setq geiser-mode-autodoc-p nil)
+(setq geiser-active-implementations '(racket))
+(setq geiser-mode-autodoc-p nil)
 
 ;; -- GUI Settings -------------------------------------------------------------
 (when (memq window-system '(mac ns))
@@ -165,4 +170,4 @@
   (menu-bar-mode 1)
   (menu-bar-mode 0))
 (when (memq window-system '(mac ns))
-  (set-face-attribute 'default nil :font "Inconsolata-15"))
+  (set-face-attribute 'default nil :font "Inconsolata-Medium-15"))
