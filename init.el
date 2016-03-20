@@ -12,18 +12,39 @@
   '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 
-;; To refresh, go to the end of the expression and C-x C-e.
-(mapc
- (lambda (package)
-   (or (package-installed-p package)
-       (if (y-or-n-p (format "Package %s is missing. Install it? " package))
-           (package-install package))))
- '(ag company-ghc dash exec-path-from-shell f findr flx flx-ido flycheck git
-      haskell-mode inflections jump magit markdown-mode org paredit pkg-info s
-      undo-tree whitespace-cleanup-mode yasnippet))
+(when (not package-archive-contents)
+  (package-refresh-contents))
 
+(defvar local-packages
+  '(ag dash exec-path-from-shell f findr flx flx-ido flycheck git haskell-mode
+       inflections jump magit markdown-mode org paredit pkg-info s undo-tree
+       whitespace-cleanup-mode yasnippet))
+
+(dolist (p local-packages)
+  (or (package-installed-p p)
+      (when (y-or-n-p (format "Package %s is missing. Install it? " p))
+	(package-install p))))
+
+;; -- IDO ----------------------------------------------------------------------
 (require 'ido)
 (ido-mode t)
+;; Display ido results vertically, rather than horizontally
+(setq ido-decorations
+      (quote
+       ("\n-> " "" "\n   " "\n   ..." "[" "]"
+	" [No match]" " [Matched]" " [Not readable]"
+	" [Too big]" " [Confirm]")))
+
+(defun ido-disable-line-truncation ()
+  (set (make-local-variable 'truncate-lines) nil))
+
+(defun ido-define-keys () ; C-n/p is more intuitive in vertical layout
+  (define-key ido-completion-map (kbd "C-n") 'ido-next-match)
+  (define-key ido-completion-map (kbd "C-p") 'ido-prev-match))
+
+(add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-truncation)
+(add-hook 'ido-setup-hook 'ido-define-keys)
+(setq ido-everywhere t)
 
 ;; -- Visual settings ----------------------------------------------------------
 (setq inhibit-splash-screen t)
@@ -42,9 +63,9 @@
 (setq ns-use-srgb-colorspace t)
 
 ;; N.B. To get antialiasing to be not insane on OS X, the following works:
-;; defaults write org.gnu.Emacs AppleAntiAliasingThreshold 2 There doesn't seem
-;; to be a big difference in values between 1 and 4, but much larger numbers
-;; turn off antialising for all intents and purposes.
+;; defaults write org.gnu.Emacs AppleAntiAliasingThreshold 2
+;; There doesn't seem to be a big difference in values between 1 and 4, but much
+;; larger numbers turn off antialising for most faces.
 
 ;; -- Linum Mode ---------------------------------------------------------------
 (global-linum-mode 1)
@@ -93,45 +114,20 @@
       (setq beg (line-beginning-position) end (line-end-position)))
     (comment-or-uncomment-region beg end)))
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region-or-line)
+;; Or for the GUI Emacs ...
 (global-set-key (kbd "s-/") 'comment-or-uncomment-region-or-line)
-
-;; Display ido results vertically, rather than horizontally
-(setq ido-decorations
-      (quote
-       ("\n-> " "" "\n   " "\n   ..." "[" "]"
-	" [No match]" " [Matched]" " [Not readable]"
-	" [Too big]" " [Confirm]")))
-
-(defun ido-disable-line-truncation ()
-  (set (make-local-variable 'truncate-lines) nil))
-
-(defun ido-define-keys () ; C-n/p is more intuitive in vertical layout
-  (define-key ido-completion-map (kbd "C-n") 'ido-next-match)
-  (define-key ido-completion-map (kbd "C-p") 'ido-prev-match))
-
-(add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-truncation)
-(add-hook 'ido-setup-hook 'ido-define-keys)
-(add-hook 'projectile-mode-hook 'projectile-rails-on)
-
-(global-company-mode t)
 
 ;; -- Markdown -----------------------------------------------------------------
 (add-to-list 'auto-mode-alist '("\\.mkd$" . markdown-mode))
 
-;; -- Haskell Mode -------------------------------------------------------------
-(defun haskell-style ()
-  "Sets the current buffer to use Haskell Style. Meant to be
-  added to `haskell-mode-hook'"
-  (interactive)
-  (setq tab-width 4
-        haskell-indentation-layout-offset 4
-        haskell-indentation-left-offset 4
-        haskell-indentation-ifte-offset 4))
+;; -- HTML ---------------------------------------------------------------------
+(add-to-list 'auto-mode-alist '("\\.tpl$" . html-mode))
 
-(add-hook 'haskell-mode-hook 'haskell-style)
-(add-hook 'haskell-mode-hook 'haskell-indentation-mode)
-;; Don't show the underscores
-(add-hook 'haskell-mode-hook 'haskell-indentation-disable-show-indentations)
+;; -- Structured Haskell Mode --------------------------------------------------
+(add-to-list 'load-path "/Users/will/src/structured-haskell-mode/elisp")
+(require 'shm)
+
+(add-hook 'haskell-mode-hook 'structured-haskell-mode)
 
 ;; -- Lisp Mode ----------------------------------------------------------------
 (add-hook 'lisp-mode-hook
@@ -159,10 +155,6 @@
 ;; -- Org Mode -----------------------------------------------------------------
 (setq org-hide-leading-stars t)
 
-;; -- Geiser Settings ----------------------------------------------------------
-(setq geiser-active-implementations '(racket))
-(setq geiser-mode-autodoc-p nil)
-
 ;; -- GUI Settings -------------------------------------------------------------
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
@@ -171,3 +163,21 @@
   (menu-bar-mode 0))
 (when (memq window-system '(mac ns))
   (set-face-attribute 'default nil :font "Inconsolata-Medium-15"))
+
+;; Custom stuff ----------------------------------------------------------------
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(magit-diff-add ((t (:inherit diff-added :foreground "black"))))
+ '(magit-diff-del ((t (:inherit diff-removed :foreground "black"))))
+ '(magit-diff-file-header ((t (:inherit diff-file-header :foreground "black"))))
+ '(magit-diff-hunk-header ((t (:inherit diff-hunk-header :foreground "black")))))
