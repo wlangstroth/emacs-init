@@ -16,35 +16,44 @@
   (package-refresh-contents))
 
 (defvar local-packages
-  '(ag dash exec-path-from-shell f findr flx flx-ido flycheck git haskell-mode
-       inflections jump magit markdown-mode org paredit pkg-info s undo-tree
-       whitespace-cleanup-mode yasnippet))
+  '(ag dash exec-path-from-shell f findr flx flx-ido flycheck git git-gutter
+  git-blame haskell-mode inflections jump magit markdown-mode org paredit
+  pkg-info s undo-tree whitespace-cleanup-mode yasnippet))
 
 (dolist (p local-packages)
   (or (package-installed-p p)
       (when (y-or-n-p (format "Package %s is missing. Install it? " p))
 	(package-install p))))
 
+;; -- Built-in Options ---------------------------------------------------------
+
+(require 'uniquify)
+
+;; -- Org Journal --------------------------------------------------------------
+
+(require 'org-journal)
+(setq org-journal-dir "~/Documents/journal/")
+(setq org-journal-date-format "%A, %Y-%m-%d")
+
+
+;; -- Eshell -------------------------------------------------------------------
+
+(require 'eshell)
+(require 'em-smart)
+(setq eshell-where-to-jump 'begin)
+(setq eshell-review-quick-commands nil)
+(setq eshell-smart-space-goes-to-end t)
+
 ;; -- IDO ----------------------------------------------------------------------
 (require 'ido)
-(ido-mode t)
-;; Display ido results vertically, rather than horizontally
-(setq ido-decorations
-      (quote
-       ("\n-> " "" "\n   " "\n   ..." "[" "]"
-	" [No match]" " [Matched]" " [Not readable]"
-	" [Too big]" " [Confirm]")))
 
-(defun ido-disable-line-truncation ()
-  (set (make-local-variable 'truncate-lines) nil))
-
-(defun ido-define-keys () ; C-n/p is more intuitive in vertical layout
-  (define-key ido-completion-map (kbd "C-n") 'ido-next-match)
-  (define-key ido-completion-map (kbd "C-p") 'ido-prev-match))
-
-(add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-truncation)
-(add-hook 'ido-setup-hook 'ido-define-keys)
+(setq ido-enable-flex-matching t)
+(setq ido-use-filename-at-point 'guess)
+(setq ido-create-new-buffer 'always)
 (setq ido-everywhere t)
+(setq ido-ignore-files '("__pycache__"))
+(setq completion-ignored-extensions '("pdf" "doc" "png" "pyc"))
+(ido-mode 1)
 
 ;; -- Visual settings ----------------------------------------------------------
 (setq inhibit-splash-screen t)
@@ -124,10 +133,10 @@
 (add-to-list 'auto-mode-alist '("\\.tpl$" . html-mode))
 
 ;; -- Structured Haskell Mode --------------------------------------------------
-(add-to-list 'load-path "/Users/will/src/structured-haskell-mode/elisp")
-(require 'shm)
+;; (add-to-list 'load-path "/Users/will/src/structured-haskell-mode/elisp")
+;; (require 'shm)
 
-(add-hook 'haskell-mode-hook 'structured-haskell-mode)
+;; (add-hook 'haskell-mode-hook 'structured-haskell-mode)
 
 ;; -- Lisp Mode ----------------------------------------------------------------
 (add-hook 'lisp-mode-hook
@@ -161,8 +170,8 @@
 (if (memq window-system '(mac ns))
   (menu-bar-mode 1)
   (menu-bar-mode 0))
-(when (memq window-system '(mac ns))
-  (set-face-attribute 'default nil :font "Inconsolata-Medium-15"))
+;; (when (memq window-system '(mac ns))
+;;   (set-face-attribute 'default nil :font "Inconsolata-Medium-14"))
 
 ;; Custom stuff ----------------------------------------------------------------
 
