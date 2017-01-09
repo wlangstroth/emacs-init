@@ -1,7 +1,7 @@
-;;; .emacs --- Will's emacs 24 init file
+;;; .emacs --- Will's emacs 25 init file
 
 ;;; Commentary:
-
+n˘
 ;; Hacked together by someone who isn't an emacs wizard. Caveat lector.
 
 ;;; Code:
@@ -47,6 +47,8 @@
 (setq eshell-where-to-jump 'begin)
 (setq eshell-review-quick-commands nil)
 (setq eshell-smart-space-goes-to-end t)
+;; Emacs 25 made this change for shell, but not eshell
+(setq display-buffer-alist '(("\\`\\*eshell" display-buffer-pop-up-window)))
 
 ;; -- IDO ----------------------------------------------------------------------
 (require 'ido)
@@ -182,10 +184,6 @@
 (if (memq window-system '(mac ns))
   (menu-bar-mode 1)
   (menu-bar-mode 0))
-
-;; -- Eshell -------------------------------------------------------------------
-;; Emacs 25 made this change for shell, but not eshell
-(setq display-buffer-alist '(("\\`\\*eshell" display-buffer-pop-up-window)))
 
 ;; Custom stuff ----------------------------------------------------------------
 
