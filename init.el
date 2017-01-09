@@ -15,10 +15,10 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-(defvar local-packages
-  '(ag dash exec-path-from-shell f findr flx flx-ido flycheck git git-gutter
-  git-blame haskell-mode inflections jump magit markdown-mode org paredit
-  pkg-info s undo-tree whitespace-cleanup-mode yasnippet))
+(defvar local-packages '(ag dash vc-darcs exec-path-from-shell f
+  flycheck git git-gutter git-blame haskell-mode inflections jump magit
+  markdown-mode org paredit pkg-info s undo-tree whitespace-cleanup-mode
+  yasnippet))
 
 (dolist (p local-packages)
   (or (package-installed-p p)
@@ -36,6 +36,10 @@
 (setq org-journal-date-format "%A, %Y-%m-%d")
 
 
+;; -- Darcs --------------------------------------------------------------------
+
+(require 'vc-darcs)
+
 ;; -- Eshell -------------------------------------------------------------------
 
 (require 'eshell)
@@ -52,7 +56,8 @@
 (setq ido-create-new-buffer 'always)
 (setq ido-everywhere t)
 (setq ido-ignore-files '("__pycache__"))
-(setq completion-ignored-extensions '("pdf" "doc" "png" "pyc"))
+(setq ido-ignore-extensions t)
+(setq completion-ignored-extensions '("pdf" "doc" "png" "pyc" "o"))
 (ido-mode 1)
 
 ;; -- Visual settings ----------------------------------------------------------
@@ -91,6 +96,7 @@
 (setq make-backup-files nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+(setq-default indent-tabs-mode nil)
 
 ;; -- Undo and Editing ---------------------------------------------------------
 (global-set-key (kbd "C-c u") 'undo-tree-visualize)
@@ -109,8 +115,8 @@
   word."
   (interactive "P")
   (let ((regexp (if arg "[ \t\n]+" "[ \t]+")))
-	(re-search-forward regexp nil t)
-	(replace-match "" nil nil)))
+  (re-search-forward regexp nil t)
+  (replace-match "" nil nil)))
 (global-set-key (kbd "C-c w") 'whack-whitespace)
 
 (defun comment-or-uncomment-region-or-line ()
@@ -119,7 +125,7 @@
   (interactive)
   (let (beg end)
     (if (region-active-p)
-	(setq beg (region-beginning) end (region-end))
+  (setq beg (region-beginning) end (region-end))
       (setq beg (line-beginning-position) end (line-end-position)))
     (comment-or-uncomment-region beg end)))
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region-or-line)
@@ -132,6 +138,9 @@
 ;; -- HTML ---------------------------------------------------------------------
 (add-to-list 'auto-mode-alist '("\\.tpl$" . html-mode))
 
+;; -- C ------------------------------------------------------------------------
+(setq c-default-style "k&r" c-basic-offset 4)
+
 ;; -- Structured Haskell Mode --------------------------------------------------
 ;; (add-to-list 'load-path "/Users/will/src/structured-haskell-mode/elisp")
 ;; (require 'shm)
@@ -140,8 +149,8 @@
 
 ;; -- Lisp Mode ----------------------------------------------------------------
 (add-hook 'lisp-mode-hook
-	  (lambda ()
-	    (local-set-key (kbd "RET") 'newline-and-indent)))
+  (lambda ()
+    (local-set-key (kbd "RET") 'newline-and-indent)))
 
 ;; -- Scrolling ----------------------------------------------------------------
 ;; Scroll one line at a time (less "jumpy" than defaults)
@@ -161,6 +170,9 @@
 ;; Search with ag
 (global-set-key (kbd "C-c s") 'ag)
 
+;; Magit -----------------------------------------------------------------------
+(global-set-key (kbd "C-c g") 'magit-status)
+
 ;; -- Org Mode -----------------------------------------------------------------
 (setq org-hide-leading-stars t)
 
@@ -170,8 +182,10 @@
 (if (memq window-system '(mac ns))
   (menu-bar-mode 1)
   (menu-bar-mode 0))
-;; (when (memq window-system '(mac ns))
-;;   (set-face-attribute 'default nil :font "Inconsolata-Medium-14"))
+
+;; -- Eshell -------------------------------------------------------------------
+;; Emacs 25 made this change for shell, but not eshell
+(setq display-buffer-alist '(("\\`\\*eshell" display-buffer-pop-up-window)))
 
 ;; Custom stuff ----------------------------------------------------------------
 
