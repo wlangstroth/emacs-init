@@ -1,7 +1,7 @@
 ;;; .emacs --- Will's emacs 25 init file
 
 ;;; Commentary:
-n˘
+
 ;; Hacked together by someone who isn't an emacs wizard. Caveat lector.
 
 ;;; Code:
