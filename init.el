@@ -39,7 +39,7 @@
 ;; -- Slime --------------------------------------------------------------------
 (load (expand-file-name "~/quicklisp/slime-helper.el"))
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
-(setq slime-contribs '(slime-fancy))
+(setq slime-contribs '(slime-fancy slime-clipboard))
 (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
 ;; Stop SLIME's REPL from grabbing DEL,
           ;; which is annoying when backspacing over a '('
@@ -155,6 +155,7 @@
 
 ;; -- Markdown -----------------------------------------------------------------
 (add-to-list 'auto-mode-alist '("\\.mkd$" . markdown-mode))
+(add-hook 'markdown-mode-hook 'turn-on-auto-fill)
 
 ;; -- HTML ---------------------------------------------------------------------
 (add-to-list 'auto-mode-alist '("\\.tpl$" . html-mode))
