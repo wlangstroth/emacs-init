@@ -6,6 +6,36 @@
 
 ;;; Code:
 
+;; Custom stuff ----------------------------------------------------------------
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(blink-cursor-mode nil)
+ '(column-number-mode t)
+ '(custom-safe-themes
+   (quote
+    ("84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" default)))
+ '(display-time-mode t)
+ '(magit-commit-arguments nil)
+ '(org-agenda-files (quote ("~/.org/house-todo.org" "~/.org/hardware.org")))
+ '(package-selected-packages
+   (quote
+    (smart-mode-line smart-mode-line-powerline-theme slime yasnippet whitespace-cleanup-mode vc-darcs undo-tree paredit markdown-mode magit jump haskell-mode git-gutter git-blame git flycheck flx-ido exec-path-from-shell darcsum ag)))
+ '(tool-bar-mode nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:family "Inconsolata" :foundry "nil" :slant normal :weight normal :height 161 :width normal))))
+ '(magit-diff-add ((t (:inherit diff-added :foreground "black"))))
+ '(magit-diff-del ((t (:inherit diff-removed :foreground "black"))))
+ '(magit-diff-file-header ((t (:inherit diff-file-header :foreground "black"))))
+ '(magit-diff-hunk-header ((t (:inherit diff-hunk-header :foreground "black")))))
+
 ;; -- Packages -----------------------------------------------------------------
 (require 'package)
 (add-to-list 'package-archives
@@ -17,7 +47,7 @@
 
 (defvar local-packages '(ag dash vc-darcs exec-path-from-shell f flycheck git
   git-gutter git-blame haskell-mode inflections jump magit markdown-mode org
-  paredit pkg-info s slime undo-tree whitespace-cleanup-mode yasnippet))
+  paredit slime undo-tree whitespace-cleanup-mode yasnippet))
 
 (dolist (p local-packages)
   (or (package-installed-p p)
@@ -36,6 +66,11 @@
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
 (add-hook 'lisp-mode-hook (lambda () (show-paren-mode 1)))
 
+;; -- Cosmetics ----------------------------------------------------------------
+
+(setq sml/theme 'powerline)
+(sml/setup)
+
 ;; -- Slime --------------------------------------------------------------------
 (load (expand-file-name "~/quicklisp/slime-helper.el"))
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
@@ -47,13 +82,6 @@
   (define-key slime-repl-mode-map
     (read-kbd-macro paredit-backward-delete-key) nil))
 (add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
-
-;; -- Org Journal --------------------------------------------------------------
-
-(require 'org-journal)
-(setq org-journal-dir "~/Documents/journal/")
-(setq org-journal-date-format "%A, %Y-%m-%d")
-
 
 ;; -- Darcs --------------------------------------------------------------------
 
@@ -78,7 +106,8 @@
 (setq ido-everywhere t)
 (setq ido-ignore-files '("__pycache__"))
 (setq ido-ignore-extensions t)
-(setq completion-ignored-extensions '("pdf" "doc" "png" "pyc" "o"))
+(setq completion-ignored-extensions
+      '("pdf" "doc" "png" "pyc" "o" "fasl"))
 (ido-mode 1)
 
 ;; -- Visual settings ----------------------------------------------------------
@@ -101,14 +130,6 @@
 ;; defaults write org.gnu.Emacs AppleAntiAliasingThreshold 2
 ;; There doesn't seem to be a big difference in values between 1 and 4, but much
 ;; larger numbers turn off antialising for most faces.
-
-;; -- Linum Mode ---------------------------------------------------------------
-(global-linum-mode 1)
-(setq linum-format "%d ")
-(setq linum-disabled-modes-list '(eshell-mode wl-summary-mode compilation-mode))
-(defun linum-on ()
-  (unless (or (minibufferp) (member major-mode linum-disabled-modes-list))
-    (linum-mode 1)))
 
 ;; -- Annoying Things ----------------------------------------------------------
 (setq ring-bell-function 'ignore)
@@ -163,12 +184,6 @@
 ;; -- C ------------------------------------------------------------------------
 (setq c-default-style "k&r" c-basic-offset 4)
 
-;; -- Structured Haskell Mode --------------------------------------------------
-;; (add-to-list 'load-path "/Users/will/src/structured-haskell-mode/elisp")
-;; (require 'shm)
-
-;; (add-hook 'haskell-mode-hook 'structured-haskell-mode)
-
 ;; -- Scrolling ----------------------------------------------------------------
 ;; Scroll one line at a time (less "jumpy" than defaults)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
@@ -192,6 +207,10 @@
 
 ;; -- Org Mode -----------------------------------------------------------------
 (setq org-hide-leading-stars t)
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-iswitchb)
 
 ;; -- GUI Settings -------------------------------------------------------------
 (when (memq window-system '(mac ns))
@@ -199,23 +218,3 @@
 (if (memq window-system '(mac ns))
   (menu-bar-mode 1)
   (menu-bar-mode 0))
-
-;; Custom stuff ----------------------------------------------------------------
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (slime yasnippet whitespace-cleanup-mode vc-darcs undo-tree paredit org-journal markdown-mode magit jump haskell-mode git-gutter git-blame git geiser flycheck flx-ido exec-path-from-shell darcsum ag))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(magit-diff-add ((t (:inherit diff-added :foreground "black"))))
- '(magit-diff-del ((t (:inherit diff-removed :foreground "black"))))
- '(magit-diff-file-header ((t (:inherit diff-file-header :foreground "black"))))
- '(magit-diff-hunk-header ((t (:inherit diff-hunk-header :foreground "black")))))
